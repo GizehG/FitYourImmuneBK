@@ -1,0 +1,18 @@
+{
+  "name": "fityourimmune-bk",
+  "version": "1.0.0",
+  "description": "Backend FYI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
+  },
+  "author": "Gizeh Garcia",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "pg": "^8.4.2",
+    "postgres": "^1.0.2"
+  }
+}
