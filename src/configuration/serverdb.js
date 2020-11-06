@@ -13,6 +13,19 @@ pool.connect((error) => {
     else console.log("DB corriendo")
 });
 
+const login = (request, response) =>{
+    const {email, passwd} = request.body;
+    pool.query('SELECT nombre FROM Paciente WHERE email=$1 AND passwd=$2',
+    [email, passwd], 
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
 /*
     Manejo de Doctores
 */
@@ -35,7 +48,7 @@ const insertDoctor = (request, response) => {
 const insertPaciente = (request, response) => {
     const { dpi, nombre, apellido, email, passwd, colegiado } = request.body;
     pool.query('INSERT INTO  Paciente (dpi, nombre, apellido, email, passwd, colegiado) VALUES ($1, $2, $3, $4, $5, $6)', 
-    [dpi, nombre, apellido, email, passwd, colegiado], 
+    [dpi, nombre, apellido, email, passwd, colegiado], console.log(this.data),
     (error, data) => {
         if (error) {
             throw error;
@@ -146,14 +159,27 @@ const insertDieta = (request, response) => {
     )
 }
 
+const createDieta = (request, response) => {
+    const {idDieta, dpi, idAlimento} = request.body;
+    pool.query("INSERT INTO  Alimentos_Paciente_Dieta(idDieta, dpi, idAlimento) VALUES ($1, $2, $3)", 
+    [idDieta, dpi, idAlimento], 
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
 /*
     Manejo de Alimentos
 */
 
 const insertAlimentos = (request, response) => {
-    const { nombre, tipo, idDieta} = request.body;
-    pool.query("INSERT INTO  Alimentos (idAlimento, nombre, tipo, idDieta) VALUES (default, $1, $2, $3)", 
-    [nombre, tipo, idDieta], 
+    const { nombre, tipo} = request.body;
+    pool.query("INSERT INTO  Alimentos (idAlimento, nombre, tipo) VALUES (default, $1, $2)", 
+    [nombre, tipo], 
     (error, data) => {
         if (error) {
             throw error;
@@ -166,6 +192,7 @@ const insertAlimentos = (request, response) => {
 
 module.exports={
     //Insertar usuarios
+    login,
     insertDoctor,
     insertPaciente,
     insertAudio,
@@ -174,7 +201,8 @@ module.exports={
     insertRutina,
     insertEjercicios,
     insertDieta,
-    insertAlimentos
+    insertAlimentos,
+    createDieta
   
     
 }

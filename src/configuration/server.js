@@ -8,6 +8,9 @@ app.use(express.json());
 app.use(cors());
 app.set("port", 3090);
 
+//Ruta para el login
+app.post('/login', db.login)
+
 //Rutas para manejo de doctores
 app.post('/doctor', db.insertDoctor)
 
@@ -31,9 +34,11 @@ app.post('/ejercicio', db.insertEjercicios)
 
 //Rutas para manejo de dieta
 app.post('/dieta', db.insertDieta)
+app.post('/createDieta', db.createDieta)
 
 //Rutas para manejo de dieta
 app.post('/alimento', db.insertAlimentos)
+
 
 module.exports = app;
 

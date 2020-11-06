@@ -82,7 +82,7 @@ CREATE TABLE Rutina (
     FOREIGN KEY (dpi) REFERENCES Paciente (dpi),
     PRIMARY KEY (idRutina)
 );
-INSERT INTO Rutina VALUES (default, '100lb', default, default, 22003301010);
+INSERT INTO Rutina VALUES (default, '100', default, default, 22003301010);
 
 CREATE TABLE Ejercicios(
     idEjercicio serial NOT NULL,
@@ -117,11 +117,20 @@ CREATE TABLE Alimentos(
     idAlimento serial NOT NULL,
     nombre varchar NOT NULL,
     tipo varchar,
-    idDieta integer NOT NULL,
     FOREIGN KEY (idDieta) REFERENCES Dieta (idDieta),
     PRIMARY KEY (idAlimento)
 );
-INSERT INTO Alimentos VALUES (default, 'Manzana', default, 1);
-INSERT INTO Alimentos VALUES (default, 'Lechuga', default, 1);
+INSERT INTO Alimentos VALUES (default, 'Manzana', default);
+INSERT INTO Alimentos VALUES (default, 'Lechuga', default);
 
+CREATE TABLE Alimentos_Paciente_Dieta(
+    idDieta integer NOT NULL,
+    dpi bigint NOT NULL,
+    idAlimento INTEGER NOT NULL,
+    FOREIGN KEY (idDieta) REFERENCES Dieta (idDieta),
+    FOREIGN KEY (idAlimento) REFERENCES Alimentos (idAlimento),
+    FOREIGN KEY (dpi) REFERENCES Paciente (dpi),
+    primary key (idAlimento, dpi, idDieta)
+);
+------------------
 
