@@ -73,7 +73,7 @@ CREATE TABLE HistoriaClinica (
 INSERT INTO HistoriaClinica VALUES (default, '31/03/1995', 150, 168, 'no', 'no', 'no','', 22003301010 );
 INSERT INTO HistoriaClinica VALUES (default, '31/03/1998', 150, 168, 'no', 'no', default,'', 22003301010 );
 
-CREATE TABLE Rutina (
+CREATE TABLE Rutina ( 
     idRutina serial NOT NULL,
     pesoIdeal integer,
     tiempoDisponible integer,
@@ -117,6 +117,7 @@ CREATE TABLE Alimentos(
     idAlimento serial NOT NULL,
     nombre varchar NOT NULL,
     tipo varchar,
+    idDieta integer,
     FOREIGN KEY (idDieta) REFERENCES Dieta (idDieta),
     PRIMARY KEY (idAlimento)
 );

@@ -51,19 +51,73 @@ const getDoctores = (request, response) => {
     })
 }
 
+const getNombreDoctores = (request, response) => {
+    pool.query('SELECT colegiado, nombreDoc from Doctor', (error, data) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(data.rows)
+    })
+}
+
+const getInfoDoc = (request, response) => {
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    pool.query(`SELECT d.nombreDoc, d.telefono, d.direccion, p.nombre AS paciente FROM Doctor d INNER JOIN Paciente p ON d.colegiado=p.colegiado AND dpi = ${dpi}`, 
+     
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
 /*
     Manejo de Pacientes
 */
 const insertPaciente = (request, response) => {
-    const { dpi, nombre, apellido, email, passwd, colegiado } = request.body;
-    pool.query('INSERT INTO  Paciente (dpi, nombre, apellido, email, passwd, colegiado) VALUES ($1, $2, $3, $4, $5, $6)', 
-    [dpi, nombre, apellido, email, passwd, colegiado], console.log(this.data),
+    const { dpi, nombre, apellido,  email, passwd, telefono, colegiado } = request.body;
+    pool.query('INSERT INTO  Paciente (dpi, nombre, apellido,  email, passwd, telefono, colegiado) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
+    [dpi, nombre, apellido, email, passwd, telefono, colegiado], console.log(this.data),
     (error, data) => {
         if (error) {
             throw error;
         }
         response.status(200).json(data.rows);
     })
+}
+
+const updatePaciente = (request, response) => {
+    console.log("llegaa");
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    const {nombre, apellido, telefono, email, passwd} = request.body
+    console.log(request.body)
+    pool.query(`UPDATE Paciente SET nombre='${nombre}', apellido='${apellido}', telefono='${telefono}', email='${email}', passwd='${passwd}' WHERE dpi = ${dpi}`, 
+     
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
+const getPaciente = (request, response) => {
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    pool.query(`SELECT nombre, apellido, telefono, email, passwd FROM Paciente WHERE dpi = ${dpi}`, 
+     
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
 }
 
 /*
@@ -107,6 +161,20 @@ const getAudios = (request, response) => {
         )
     }
 
+    const getSOS = (request, response) => {
+        const dpi = parseInt(request.params.dpi)
+        console.log(request.body)
+        pool.query(`SELECT nombreSOS, telefono, email from ContactoSOS WHERE dpi = ${dpi}`, 
+         
+        (error, data) => {
+            if (error) {
+                throw error;
+            }
+            response.status(200).json(data.rows);
+        }
+        )
+    }
+
 /*
     Manejo de Historia Clínica
 */
@@ -114,6 +182,20 @@ const insertHistoria = (request, response) => {
     const { fecha_nac, peso, altura, traumas, cirugias, medicamentosActuales, infecciones, dpi} = request.body;
     pool.query("INSERT INTO  HistoriaClinica  (idHIS, fecha_nac, peso, altura, traumas, cirugias, medicamentosActuales, infecciones, dpi) VALUES (default, $1, $2, $3, $4, $5, $6, $7, $8)", 
     [fecha_nac, peso, altura, traumas, cirugias, medicamentosActuales, infecciones, dpi], 
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
+const getHistorial = (request, response) => {
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    pool.query(`SELECT fecha_nac, peso, altura, cirugias, traumas, infecciones, medicamentosActuales FROM HistoriaClinica WHERE dpi = ${dpi}`, 
+     
     (error, data) => {
         if (error) {
             throw error;
@@ -131,6 +213,34 @@ const insertRutina = (request, response) => {
     pool.query("INSERT INTO  Rutina (idRutina, pesoIdeal, tiempoDisponible, hora_entreno, dpi) VALUES (default, $1, $2, $3, $4)", 
     [pesoIdeal, tiempoDisponible, hora_entreno, dpi], 
     (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
+const getRutinaDets = (request, response) => {
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    pool.query(`SELECT tiempodisponible, hora_entreno FROM rutina WHERE dpi = ${dpi}`, 
+     
+    (error, data) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
+
+const generarRutina = (request, response) => {
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    pool.query(`SELECT e.nombre FROM Ejercicios e, Rutina r, Paciente p WHERE r.idRutina = e.idRutina`, 
+     
+    (error, data) => { 
         if (error) {
             throw error;
         }
@@ -201,6 +311,20 @@ const insertAlimentos = (request, response) => {
     }
     )
 }
+
+const generarDieta = (request, response) => {
+    const dpi = parseInt(request.params.dpi)
+    console.log(request.body)
+    pool.query(`SELECT a.nombre FROM Alimentos a, Dieta d WHERE a.iddieta=d.iddieta`, 
+     
+    (error, data) => { 
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(data.rows);
+    }
+    )
+}
  
 
 module.exports={
@@ -208,16 +332,25 @@ module.exports={
     login,
     insertDoctor,
     getDoctores,
+    getNombreDoctores,
+    getInfoDoc,
     insertPaciente,
+    updatePaciente,
+    getPaciente,
     insertAudio,
     getAudios,
     insertSOS, 
+    getSOS,
     insertHistoria,
+    getHistorial,
     insertRutina,
+    getRutinaDets,
+    generarRutina,
     insertEjercicios,
     insertDieta,
     insertAlimentos,
-    createDieta
+    createDieta,
+    generarDieta
   
     
 }
