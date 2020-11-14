@@ -13,12 +13,14 @@ app.post('/login', db.login)
 
 //Rutas para manejo de doctores
 app.post('/doctor', db.insertDoctor)
+app.get('/doctor', db.getDoctores)
 
 //Rutas para manejo de pacientes
 app.post('/paciente', db.insertPaciente)
 
 //Rutas para manejo de audios
 app.post('/audio', db.insertAudio)
+app.get('/audios', db.getAudios)
 
 //Rutas para manejo de SOS
 app.post('/SOS', db.insertSOS)

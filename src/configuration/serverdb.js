@@ -42,6 +42,15 @@ const insertDoctor = (request, response) => {
     )
 }
 
+const getDoctores = (request, response) => {
+    pool.query('SELECT * from Doctor', (error, data) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(data.rows)
+    })
+}
+
 /*
     Manejo de Pacientes
 */
@@ -54,17 +63,16 @@ const insertPaciente = (request, response) => {
             throw error;
         }
         response.status(200).json(data.rows);
-    }
-    )
+    })
 }
 
 /*
     Manejo de Audios
 */
 const insertAudio = (request, response) => {
-    const { link, funcion, autor } = request.body;
-    pool.query("INSERT INTO  Audios (correlativo, link, funcion, autor) VALUES (default, $1, $2, $3)", 
-    [link, funcion, autor], 
+    const { link, funcion, nombre_audio } = request.body;
+    pool.query("INSERT INTO  Audios (correlativo, link, funcion, nombre_audio) VALUES (default, $1, $2, $3)", 
+    [link, funcion, nombre_audio], 
     (error, data) => {
         if (error) {
             throw error;
@@ -72,6 +80,15 @@ const insertAudio = (request, response) => {
         response.status(200).json(data.rows);
     }
     )
+}
+
+const getAudios = (request, response) => {
+    pool.query('SELECT * from Audios', (error, data) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(data.rows)
+    })
 }
 
 /*
@@ -89,10 +106,6 @@ const insertAudio = (request, response) => {
         }
         )
     }
-
-    
-
-    
 
 /*
     Manejo de Historia Clínica
@@ -188,14 +201,16 @@ const insertAlimentos = (request, response) => {
     }
     )
 }
-
+ 
 
 module.exports={
     //Insertar usuarios
     login,
     insertDoctor,
+    getDoctores,
     insertPaciente,
     insertAudio,
+    getAudios,
     insertSOS, 
     insertHistoria,
     insertRutina,

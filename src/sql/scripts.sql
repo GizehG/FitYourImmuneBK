@@ -35,7 +35,7 @@ CREATE TABLE Audios (
     correlativo serial NOT NULL,
     link varchar NOT NULL,
     funcion varchar,
-    autor varchar,
+    nombre_audio varchar,
     PRIMARY KEY (correlativo)
 );
 
